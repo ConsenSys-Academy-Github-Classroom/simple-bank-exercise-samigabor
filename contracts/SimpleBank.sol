@@ -7,35 +7,22 @@
 pragma solidity >=0.5.16 <0.9.0;
 
 contract SimpleBank {
-
     /* State variables
      */
-    
-    
-    // Fill in the visibility keyword. 
-    // Hint: We want to protect our users balance from other contracts
-    
-    mapping(address => uint256) private balances;
-    // Fill in the visibility keyword
-    // Hint: We want to create a getter function and allow contracts to be able
-    //       to see if a user is enrolled.
-    mapping (address => bool) public enrolled;
 
-    // Let's make sure everyone knows who owns the bank, yes, fill in the
-    // appropriate visilibility keyword
+    mapping(address => uint256) private balances;
+
+    mapping(address => bool) public enrolled;
+
     address public owner = msg.sender;
-    
+
     /* Events - publicize actions to external listeners
      */
-    
-    // Add an argument for this event, an accountAddress
+
     event LogEnrolled(address accountAddress);
 
-    // Add 2 arguments for this event, an accountAddress and an amount
     event LogDepositMade(address accountAddress, uint256 amount);
 
-    // Create an event called LogWithdrawal
-    // Hint: it should take 3 arguments: an accountAddress, withdrawAmount and a newBalance
     event LogWithdrawal(
         address accountAddress,
         uint256 withdrawAmount,
@@ -50,24 +37,19 @@ contract SimpleBank {
     // Typically, called when invalid data is sent
     // Added so ether sent to this contract is reverted if the contract fails
     // otherwise, the sender's money is transferred to contract
-    function () external payable {
+    function() external payable {
         revert();
     }
 
     /// @notice Get balance
     /// @return The balance of the user
-      // 1. A SPECIAL KEYWORD prevents function from editing state variables;
-      //    allows function to run locally/off blockchain
-      // 2. Get the balance of the sender of this transaction
     function getBalance() public view returns (uint256) {
         return balances[msg.sender];
     }
 
     /// @notice Enroll a customer with the bank
     /// @return The users enrolled status
-    // Emit the appropriate event
-    function enroll() public returns (bool){
-      // 1. enroll of the sender of this transaction
+    function enroll() public returns (bool) {
         enrolled[msg.sender] = true;
         emit LogEnrolled(msg.sender);
         return enrolled[msg.sender];
